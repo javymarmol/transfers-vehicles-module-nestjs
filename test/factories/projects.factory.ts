@@ -7,12 +7,13 @@ export class ProjectsFactory {
   }
 
   static create(overrides?: Partial<Project>): Project {
-    return {
+    return <Project>{
       id: faker.number.int(),
       name: faker.word.noun(),
       description: faker.lorem.paragraph(),
       created_at: faker.date.recent(),
       users: [],
+      organizational_units: [],
       ...overrides,
     };
   }

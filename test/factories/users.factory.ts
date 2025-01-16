@@ -14,6 +14,7 @@ export class UsersFactory {
       password_hash: faker.internet.password(),
       created_at: faker.date.recent(),
       projects: [],
+      organizational_units: [],
       ...overrides,
     };
   }
