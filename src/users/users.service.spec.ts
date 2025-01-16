@@ -59,7 +59,7 @@ describe('UsersService', () => {
         username: user.username,
         email: user.email,
         password: 'StrongPass123!',
-        projectsIds: [,
+        projectsIds: [],
       };
       mockRepository.create.mockReturnValue(user);
       mockRepository.save.mockResolvedValue(user);
@@ -84,7 +84,7 @@ describe('UsersService', () => {
       expect(result.created_at).toStrictEqual(expect.any(Date));
     });
 
-    it("should create a user with 2 projects", async () => {
+    it"should create a user with 2 projects"', async () => {
       const user = UsersFactory.create();
       const projects = ProjectsFactory.createMany(2);
       const createUserDto = {

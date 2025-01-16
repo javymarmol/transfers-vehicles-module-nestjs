@@ -133,7 +133,7 @@ describe('UsersController', () => {
         username: user.username,
         email: user.email,
         password: 'StrongPass123!',
-        projectsIds: [,
+        projectsIds: [],
       };
       service.create = jest
         .fn()
@@ -165,7 +165,7 @@ describe('UsersController', () => {
       expect(result.username).toBe(updateUserDto.username);
     });
 
-    it("should update project to user", async () => {
+    it"should update project to user"', async () => {
       const user = UsersFactory.create();
       const project = ProjectsFactory.create();
       const updateUserDto = {
