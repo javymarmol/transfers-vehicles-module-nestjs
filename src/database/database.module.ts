@@ -17,7 +17,7 @@ import dbConfig from '../../config/database.config';
         password: configService.password,
         database: configService.dbName,
         synchronize: false,
-        autoLoadEntities: false,
+        autoLoadEntities: true,
       }),
     }),
   ],

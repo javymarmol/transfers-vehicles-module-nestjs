@@ -1,7 +1,7 @@
-import { DataType, newDb } from 'pg-mem';
-import { EntityClassOrSchema } from '@nestjs/typeorm/dist/interfaces/entity-class-or-schema.type';
+import { DataType, newDb } from "pg-mem";
+import "reflect-metadata";
 
-export async function TempDB(entities: EntityClassOrSchema[]): Promise<any> {
+export async function TempDB(entities: any[]): Promise<any> {
   const db = newDb({
     autoCreateForeignKeyIndices: true,
   });
@@ -31,15 +31,27 @@ export async function TempDB(entities: EntityClassOrSchema[]): Promise<any> {
 
   const datasource = await db.adapters.createTypeormDataSource({
     type: 'postgres',
-    entities: [entities],
+    entities: ['../../src/**/*.entity.ts'],
     database: 'test',
+    synchronize: true,
     migrations: ['../../src/database/migrations/*.ts'],
+    migrationsRun: true,
   });
 
   // Initialize datasource
-  await datasource.initialize();
+  await datasource
+    .initialize()
+    .then(() => {
+      console.log"Data Source has been initialized"');
+    })
+    .catch(() => console.error"Error during data source init."'));
   // create schema
-  await datasource.synchronize();
+  await datasource
+    .synchronize()
+    .then(() => {
+      console.log("Data Source has been synchronize");
+    })
+    .catch(() => console.error("Error during data source sync."));
 
   return datasource;
 }
