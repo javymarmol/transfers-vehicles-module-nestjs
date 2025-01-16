@@ -11,7 +11,6 @@ export class ProjectsService {
     @InjectRepository(Project)
     private readonly projectsRepository: Repository<Project>,
   ) {}
-
   create(data: CreateProjectDto) {
     const project = this.projectsRepository.create(data);
     return this.projectsRepository.save(project);

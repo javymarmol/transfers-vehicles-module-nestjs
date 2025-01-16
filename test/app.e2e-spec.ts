@@ -1,27 +1,22 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { INestApplication, LoggerService } from "@nestjs/common";
-import request from "supertest";
-import { AppModule } from "../src/app.module";
-import { DataSource } from "typeorm";
-import { TypeOrmModule } from "@nestjs/typeorm";
-import "reflect-metadata";
+import { Test, TestingModule } from '@nestjs/testing';
+import { INestApplication, LoggerService } from '@nestjs/common';
+import request from 'supertest';
+import { AppModule } from '../src/app.module';
+import { DataSource } from 'typeorm';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import 'reflect-metadata';
 
-import { TempDB } from "./config/test-db.config";
-import { User } from "../src/users/entities/user.entity";
+import { TempDB } from './config/test-db.config';
+import { User } from '../src/users/entities/user.entity';
 
 describe('AppController (e2e)', () => {
   let app: INestApplication;
   let dataSource: DataSource;
-
   class TestLogger implements LoggerService {
     log(message: string) {}
-
     error(message: string, trace: string) {}
-
     warn(message: string) {}
-
     debug(message: string) {}
-
     verbose(message: string) {}
   }
 
@@ -31,13 +26,13 @@ describe('AppController (e2e)', () => {
       imports: [
         AppModule,
         TypeOrmModule.forFeature([User]),
-       // TypeOrmModule.forRoot({
+        // TypeOrmModule.forRoot({
         //   name: 'default',
         //   synchronize: true,
         // }),
       ],
     })
-      / .overrideProvider(DataSource)
+      // .overrideProvider(DataSource)
       // .useValue(dataSource)
       .compile();
 
@@ -53,7 +48,7 @@ describe('AppController (e2e)', () => {
       .expect('Hello World!');
   });
 
-  it("/users (GET)", () => {
-    return request(app.getHttpServer()).get("/users").expect(200).expect([]);
+  it('/users (GET)', () => {
+    return request(app.getHttpServer()).get('/users').expect(200).expect([]);
   });
 });

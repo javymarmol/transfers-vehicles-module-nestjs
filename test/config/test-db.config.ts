@@ -1,5 +1,5 @@
-import { DataType, newDb } from "pg-mem";
-import "reflect-metadata";
+import { DataType, newDb } from 'pg-mem';
+import 'reflect-metadata';
 
 export async function TempDB(entities: any[]): Promise<any> {
   const db = newDb({
@@ -42,16 +42,17 @@ export async function TempDB(entities: any[]): Promise<any> {
   await datasource
     .initialize()
     .then(() => {
-      console.log"Data Source has been initialized"');
+      console.log('Data Source has been initialize');
     })
-    .catch(() => console.error"Error during data source init."'));
+    .catch(() => console.error('Error during data source initialization.'));
+
   // create schema
   await datasource
     .synchronize()
     .then(() => {
-      console.log("Data Source has been synchronize");
+      console.log('Data Source has been synchronize');
     })
-    .catch(() => console.error("Error during data source sync."));
+    .catch(() => console.error('Error during data source sync.'));
 
   return datasource;
 }

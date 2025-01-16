@@ -103,14 +103,14 @@ describe('UsersController', () => {
       expect(result.password_hash).not.toBe(createUserDto.password);
     });
 
-    it"should create a user with 2 projects"', async () => {
+    it('should create a user with 2 projects', async () => {
       const user = UsersFactory.create();
       const projects = ProjectsFactory.createMany(2);
       const createUserDto = {
         username: user.username,
         email: user.email,
-        password:"StrongPass123!"',
-        projectsIds: projects.map((project) => project.id,
+        password: 'StrongPass123!',
+        projectsIds: projects.map((project) => project.id),
       };
       user.projects = projects;
 
@@ -133,7 +133,7 @@ describe('UsersController', () => {
         username: user.username,
         email: user.email,
         password: 'StrongPass123!',
-        projectsIds: []
+        projectsIds: [,
       };
       service.create = jest
         .fn()
@@ -175,7 +175,7 @@ describe('UsersController', () => {
       service.update = jest
         .fn()
         .mockImplementation((id, data) =>
-          Promise.resolve(Object.assign(user, data))
+          Promise.resolve(Object.assign(user, data)),
         );
 
       const result = await controller.update(user.id, updateUserDto);

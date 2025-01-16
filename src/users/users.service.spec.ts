@@ -44,7 +44,7 @@ describe('UsersService', () => {
     service = module.get<UsersService>(UsersService);
     userRepository = module.get<Repository<User>>(getRepositoryToken(User));
     projectRepository = module.get<Repository<Project>>(
-      getRepositoryToken(Project,
+      getRepositoryToken(Project),
     );
   });
 
@@ -59,7 +59,7 @@ describe('UsersService', () => {
         username: user.username,
         email: user.email,
         password: 'StrongPass123!',
-        projectsIds: []
+        projectsIds: [,
       };
       mockRepository.create.mockReturnValue(user);
       mockRepository.save.mockResolvedValue(user);
@@ -103,7 +103,7 @@ describe('UsersService', () => {
         where: [
           { email: createUserDto.email },
           { username: createUserDto.username }
-        ]
+        ],
       });
 
       expect(mockRepository.create).toHaveBeenCalledWith(createUserDto);
