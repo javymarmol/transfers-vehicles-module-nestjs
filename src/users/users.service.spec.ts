@@ -1,13 +1,13 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { getRepositoryToken } from "@nestjs/typeorm";
-import { In, Repository } from "typeorm";
-import { BadRequestException, NotFoundException } from "@nestjs/common";
+import { Test, TestingModule } from '@nestjs/testing';
+import { getRepositoryToken } from '@nestjs/typeorm';
+import { In, Repository } from 'typeorm';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
 
-import { UsersService } from "./users.service";
-import { User } from "./entities/user.entity";
-import { UsersFactory } from "../../test/factories/users.factory";
-import { ProjectsFactory } from "../../test/factories/projects.factory";
-import { Project } from "../projects/entities/project.entity";
+import { UsersService } from './users.service';
+import { User } from './entities/user.entity';
+import { UsersFactory } from '../../test/factories/users.factory';
+import { ProjectsFactory } from '../../test/factories/projects.factory';
+import { Project } from '../projects/entities/project.entity';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -84,14 +84,14 @@ describe('UsersService', () => {
       expect(result.created_at).toStrictEqual(expect.any(Date));
     });
 
-    it"should create a user with 2 projects"', async () => {
+    it('should create a user with 2 projects', async () => {
       const user = UsersFactory.create();
       const projects = ProjectsFactory.createMany(2);
       const createUserDto = {
         username: user.username,
         email: user.email,
-        password: "StrongPass123!",
-        projectsIds: projects.map((project) => project.id)
+        password: 'StrongPass123!',
+        projectsIds: projects.map((project) => project.id),
       };
       mockRepository.create.mockReturnValue(user);
       mockRepository.save.mockResolvedValue(user);
@@ -102,14 +102,14 @@ describe('UsersService', () => {
       expect(mockRepository.findOne).toHaveBeenCalledWith({
         where: [
           { email: createUserDto.email },
-          { username: createUserDto.username }
+          { username: createUserDto.username },
         ],
       });
 
       expect(mockRepository.create).toHaveBeenCalledWith(createUserDto);
       expect(mockRepository.save).toHaveBeenCalledWith(user);
       expect(projectRepository.findBy).toHaveBeenCalledWith({
-        id: In(createUserDto.projectsIds)
+        id: In(createUserDto.projectsIds),
       });
       expect(result).toBeDefined();
       expect(result).toBe(user);
@@ -124,7 +124,7 @@ describe('UsersService', () => {
         username: user.username,
         email: user.email,
         password: 'StrongPass123!',
-        projectsIds: [1, 2]
+        projectsIds: [1, 2],
       };
       mockRepository.findOne.mockResolvedValue(user);
       try {
@@ -156,7 +156,7 @@ describe('UsersService', () => {
       expect(result.id).toBe(id);
     });
 
-    it("should return an user by id with a project", async () => {
+    it('should return an user by id with a project', async () => {
       const project = ProjectsFactory.create();
       const user = UsersFactory.create();
       user.projects = [project];
@@ -166,7 +166,7 @@ describe('UsersService', () => {
 
       expect(userRepository.findOne).toHaveBeenCalledWith({
         where: { id: user.id },
-        relations: ["projects"]
+        relations: ['projects'],
       });
       expect(result).toBe(user);
       expect(result.projects).toContain(project);
@@ -201,7 +201,7 @@ describe('UsersService', () => {
     expect(result.username).toBe(updateUserDto.username);
     expect(userRepository.findOne).toHaveBeenCalledWith({
       where: { id },
-      relations: ["projects"]
+      relations: ['projects'],
     });
     expect(userRepository.save).toHaveBeenCalledWith({
       ...user,
@@ -220,14 +220,14 @@ describe('UsersService', () => {
     expect(result).toStrictEqual({ id });
   });
 
-  describe("Projects User", () => {
-    describe("addProjectToUser", () => {
-      it("should add a project to user", async () => {
+  describe('Projects User', () => {
+    describe('addProjectToUser', () => {
+      it('should add a project to user', async () => {
         const user = UsersFactory.create();
         const project = ProjectsFactory.create();
 
-        jest.spyOn(userRepository, "findOne").mockResolvedValueOnce(user);
-        jest.spyOn(projectRepository, "findOne").mockResolvedValueOnce(project);
+        jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(user);
+        jest.spyOn(projectRepository, 'findOne').mockResolvedValueOnce(project);
         userRepository.save = jest
           .fn()
           .mockResolvedValueOnce({ ...user, projects: [project] });
@@ -239,33 +239,33 @@ describe('UsersService', () => {
         expect(result.projects.length).toBe(1);
       });
 
-      it("should should throw an error if user not found ", async () => {
+      it('should should throw an error if user not found ', async () => {
         userRepository.findOne = jest.fn().mockResolvedValueOnce(null);
 
         try {
           await service.addProjectToUser(1, 1);
         } catch (error) {
-          expect(error.message).toBe("User not found");
+          expect(error.message).toBe('User not found');
           expect(error).toBeInstanceOf(NotFoundException);
         }
       });
 
-      it("should should throw an error if project not found ", async () => {
+      it('should should throw an error if project not found ', async () => {
         const user = UsersFactory.create();
-        jest.spyOn(userRepository, "findOne").mockResolvedValueOnce(user);
-        jest.spyOn(projectRepository, "findOne").mockResolvedValueOnce(null);
+        jest.spyOn(userRepository, 'findOne').mockResolvedValueOnce(user);
+        jest.spyOn(projectRepository, 'findOne').mockResolvedValueOnce(null);
 
         try {
           await service.addProjectToUser(user.id, 1);
         } catch (error) {
-          expect(error.message).toBe("Project not found");
+          expect(error.message).toBe('Project not found');
           expect(error).toBeInstanceOf(NotFoundException);
         }
       });
     });
 
-    describe("removeProjectFromUser", () => {
-      it("should remove a project from user", async () => {
+    describe('removeProjectFromUser', () => {
+      it('should remove a project from user', async () => {
         const user = UsersFactory.create();
         const project = ProjectsFactory.create();
         user.projects = [project];
@@ -281,25 +281,25 @@ describe('UsersService', () => {
         expect(result.projects).toEqual([]);
       });
 
-      it("should should throw an error if user not found ", async () => {
+      it('should should throw an error if user not found ', async () => {
         userRepository.findOne = jest.fn().mockResolvedValueOnce(null);
 
         try {
           await service.removeProjectFromUser(1, 1);
         } catch (error) {
-          expect(error.message).toBe("User not found");
+          expect(error.message).toBe('User not found');
           expect(error).toBeInstanceOf(NotFoundException);
         }
       });
 
-      it("should should throw an error if project not found ", async () => {
+      it('should should throw an error if project not found ', async () => {
         const user = UsersFactory.create();
         userRepository.findOne = jest.fn().mockResolvedValueOnce(user);
 
         try {
           await service.removeProjectFromUser(user.id, 1);
         } catch (error) {
-          expect(error.message).toBe("Project not found");
+          expect(error.message).toBe('Project not found');
           expect(error).toBeInstanceOf(NotFoundException);
         }
       });

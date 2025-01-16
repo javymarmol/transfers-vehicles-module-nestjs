@@ -1,11 +1,15 @@
-import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
-import { InjectRepository } from "@nestjs/typeorm";
-import { In, Repository } from "typeorm";
-import * as bcrypt from "bcrypt";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdateUserDto } from "./dto/update-user.dto";
-import { User } from "./entities/user.entity";
-import { Project } from "../projects/entities/project.entity";
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { In, Repository } from 'typeorm';
+import * as bcrypt from 'bcrypt';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { User } from './entities/user.entity';
+import { Project } from '../projects/entities/project.entity';
 
 @Injectable()
 export class UsersService {
@@ -23,7 +27,7 @@ export class UsersService {
     const user = this.usersRepository.create(data);
     if (data.projectsIds) {
       user.projects = await this.projectsRepository.findBy({
-        id: In(data.projectsIds,
+        id: In(data.projectsIds),
       });
     }
     user.password_hash = await bcrypt.hash(data.password, 10);
@@ -37,7 +41,7 @@ export class UsersService {
   async findOne(id: number) {
     const user = await this.usersRepository.findOne({
       where: { id },
-      relations: ["projects"]
+      relations: ['projects'],
     });
     if (!user) {
       throw new NotFoundException('User not found');
@@ -49,7 +53,7 @@ export class UsersService {
     const user = await this.findOne(id);
     if (changes.projectsIds) {
       user.projects = await this.projectsRepository.findBy({
-        id: In(changes.projectsIds)
+        id: In(changes.projectsIds),
       });
     }
     this.usersRepository.merge(user, changes);
@@ -71,16 +75,16 @@ export class UsersService {
   async addProjectToUser(userId: number, projectId: number) {
     const user = await this.usersRepository.findOne({
       where: { id: userId },
-      relations: ["projects"]
+      relations: ['projects'],
     });
     if (!user) {
-      throw new NotFoundException("User not found");
+      throw new NotFoundException('User not found');
     }
     const project = await this.projectsRepository.findOne({
-      where: { id: projectId }
+      where: { id: projectId },
     });
     if (!project) {
-      throw new NotFoundException("Project not found");
+      throw new NotFoundException('Project not found');
     }
     user.projects.push(project);
     return this.usersRepository.save(user);
@@ -89,10 +93,10 @@ export class UsersService {
   async removeProjectFromUser(userId: number, projectId: number) {
     const user = await this.usersRepository.findOne({
       where: { id: userId },
-      relations: ["projects"]
+      relations: ['projects'],
     });
     if (!user) {
-      throw new NotFoundException("User not found");
+      throw new NotFoundException('User not found');
     }
     user.projects = user.projects.filter((project) => project.id !== projectId);
     return this.usersRepository.save(user);

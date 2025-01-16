@@ -1,10 +1,10 @@
-import { Test, TestingModule } from "@nestjs/testing";
-import { UsersController } from "./users.controller";
-import { UsersService } from "./users.service";
-import { MockFunctionMetadata, ModuleMocker } from "jest-mock";
-import { UsersFactory } from "../../test/factories/users.factory";
-import { BadRequestException, NotFoundException } from "@nestjs/common";
-import { ProjectsFactory } from "../../test/factories/projects.factory";
+import { Test, TestingModule } from '@nestjs/testing';
+import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
+import { MockFunctionMetadata, ModuleMocker } from 'jest-mock';
+import { UsersFactory } from '../../test/factories/users.factory';
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { ProjectsFactory } from '../../test/factories/projects.factory';
 
 const moduleMocker = new ModuleMocker(global);
 
@@ -165,11 +165,11 @@ describe('UsersController', () => {
       expect(result.username).toBe(updateUserDto.username);
     });
 
-    it"should update project to user"', async () => {
+    it('should update project to user', async () => {
       const user = UsersFactory.create();
       const project = ProjectsFactory.create();
       const updateUserDto = {
-        projectsIds: [project.id]
+        projectsIds: [project.id],
       };
       user.projects = [project];
       service.update = jest
@@ -222,8 +222,8 @@ describe('UsersController', () => {
     });
   });
 
-  describe("removeProject", () => {
-    it("should remove a project from user", async () => {
+  describe('removeProject', () => {
+    it('should remove a project from user', async () => {
       const user = UsersFactory.create();
       const project = ProjectsFactory.create();
       service.removeProjectFromUser = jest.fn().mockResolvedValue(user);
@@ -235,21 +235,21 @@ describe('UsersController', () => {
       expect(result.projects.length).toBe(0);
     });
 
-    it("should throw an error if user not found", async () => {
+    it('should throw an error if user not found', async () => {
       service.removeProjectFromUser = jest
         .fn()
-        .mockRejectedValue(new NotFoundException("User not found"));
+        .mockRejectedValue(new NotFoundException('User not found'));
 
       await expect(controller.removeProject(1, 1)).rejects.toThrow(
-        NotFoundException
+        NotFoundException,
       );
       expect(service.removeProjectFromUser).toHaveBeenCalledWith(1, 1);
       expect(service.removeProjectFromUser).toHaveBeenCalledTimes(1);
     });
   });
 
-  describe("addProject", () => {
-    it("should add a project to user", async () => {
+  describe('addProject', () => {
+    it('should add a project to user', async () => {
       const user = UsersFactory.create();
       const project = ProjectsFactory.create();
       user.projects = [project];
@@ -262,13 +262,13 @@ describe('UsersController', () => {
       expect(result.projects.length).toBe(1);
     });
 
-    it("should throw an error if user not found", async () => {
+    it('should throw an error if user not found', async () => {
       service.addProjectToUser = jest
         .fn()
-        .mockRejectedValue(new NotFoundException("User not found"));
+        .mockRejectedValue(new NotFoundException('User not found'));
 
       await expect(controller.addProject(1, 1)).rejects.toThrow(
-        NotFoundException
+        NotFoundException,
       );
       expect(service.addProjectToUser).toHaveBeenCalledWith(1, 1);
       expect(service.addProjectToUser).toHaveBeenCalledTimes(1);
