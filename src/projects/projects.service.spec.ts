@@ -119,6 +119,7 @@ describe('ProjectsService', () => {
 
       expect(mockRepository.findOne).toHaveBeenCalledWith({
         where: { id: project.id },
+        relations: ['organizational_units'],
       });
       expect(mockRepository.merge).toHaveBeenCalledWith(
         project,

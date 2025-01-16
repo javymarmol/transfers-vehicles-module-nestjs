@@ -1,20 +1,20 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { OrganizationalUnitsController } from './organizational_units.controller';
-import { OrganizationalUnitsService } from './organizational_units.service';
+import { VehiclesController } from './vehicles.controller';
 import { MockFunctionMetadata, ModuleMocker } from 'jest-mock';
+import { VehiclesService } from './vehicles.service';
 
 const moduleMocker = new ModuleMocker(global);
 
-describe('OrganizationalUnitsController', () => {
-  let controller: OrganizationalUnitsController;
+describe('VehiclesController', () => {
+  let controller: VehiclesController;
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
-      controllers: [OrganizationalUnitsController],
+      controllers: [VehiclesController],
     })
       .useMocker((token) => {
         const results = ['test1', 'test2'];
-        if (token === OrganizationalUnitsService) {
+        if (token === VehiclesService) {
           return { findAll: jest.fn().mockResolvedValue(results) };
         }
         if (typeof token === 'function') {
@@ -27,9 +27,7 @@ describe('OrganizationalUnitsController', () => {
       })
       .compile();
 
-    controller = module.get<OrganizationalUnitsController>(
-      OrganizationalUnitsController,
-    );
+    controller = module.get<VehiclesController>(VehiclesController);
   });
 
   it('should be defined', () => {

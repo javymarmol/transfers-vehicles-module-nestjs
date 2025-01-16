@@ -8,6 +8,7 @@ import { UsersModule } from './users/users.module';
 import { DatabaseModule } from './database/database.module';
 import { ProjectsModule } from './projects/projects.module';
 import { OrganizationalUnitsModule } from './organizational_units/organizational_units.module';
+import { VehiclesModule } from './vehicles/vehicles.module';
 
 import dbConfig from '../config/database.config';
 
@@ -30,6 +31,7 @@ import dbConfig from '../config/database.config';
     DatabaseModule,
     ProjectsModule,
     OrganizationalUnitsModule,
+    VehiclesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
