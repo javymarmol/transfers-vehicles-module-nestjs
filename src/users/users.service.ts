@@ -1,20 +1,19 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import * as bcrypt from 'bcrypt';
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { In, Repository } from "typeorm";
+import * as bcrypt from "bcrypt";
 
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { User } from './entities/user.entity';
+import { CreateUserDto } from "./dto/create-user.dto";
+import { UpdateUserDto } from "./dto/update-user.dto";
+import { User } from "./entities/user.entity";
+import { Project } from "../projects/entities/project.entity";
 
 @Injectable()
 export class UsersService {
   constructor(
     @InjectRepository(User) private readonly usersRepository: Repository<User>,
+    @InjectRepository(Project)
+    private readonly projectsRepository: Repository<Project>,
   ) {}
 
   async create(data: CreateUserDto) {
@@ -23,6 +22,11 @@ export class UsersService {
       throw new BadRequestException('User already exists');
     }
     const user = this.usersRepository.create(data);
+    if (data.projectsIds) {
+      user.projects = await this.projectsRepository.findBy({
+        id: In(data.projectsIds,
+      });
+    }
     user.password_hash = await bcrypt.hash(data.password, 10);
     return this.usersRepository.save(user);
   }
@@ -32,16 +36,24 @@ export class UsersService {
   }
 
   async findOne(id: number) {
-    const user = await this.usersRepository.findOne({ where: { id } });
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      relations: ["projects"]
+    });
     if (!user) {
       throw new NotFoundException('User not found');
     }
     return user;
   }
 
-  async update(id: number, updateUserDto: UpdateUserDto) {
+  async update(id: number, changes: UpdateUserDto) {
     const user = await this.findOne(id);
-    this.usersRepository.merge(user, updateUserDto);
+    if (changes.projectsIds) {
+      user.projects = await this.projectsRepository.findBy({
+        id: In(changes.projectsIds)
+      });
+    }
+    this.usersRepository.merge(user, changes);
     return this.usersRepository.save(user);
   }
 
@@ -55,5 +67,35 @@ export class UsersService {
       where: [{ email: userData.email }, { username: userData.username }],
     });
     return !existingUser;
+  }
+
+  async addProjectToUser(userId: number, projectId: number) {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+      relations: ["projects"]
+    });
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+    const project = await this.projectsRepository.findOne({
+      where: { id: projectId }
+    });
+    if (!project) {
+      throw new NotFoundException("Project not found");
+    }
+    user.projects.push(project);
+    return this.usersRepository.save(user);
+  }
+
+  async removeProjectFromUser(userId: number, projectId: number) {
+    const user = await this.usersRepository.findOne({
+      where: { id: userId },
+      relations: ["projects"]
+    });
+    if (!user) {
+      throw new NotFoundException("User not found");
+    }
+    user.projects = user.projects.filter((project) => project.id !== projectId);
+    return this.usersRepository.save(user);
   }
 }

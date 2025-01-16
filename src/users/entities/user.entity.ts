@@ -2,9 +2,12 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinTable,
+  ManyToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Project } from '../../projects/entities/project.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -23,4 +26,8 @@ export class User {
 
   @CreateDateColumn({ default: () => 'CURRENT_TIMESTAMP' })
   created_at: Date;
+
+  @ManyToMany(() => Project, (project) => project.users)
+  @JoinTable()
+  projects: Project[];
 }

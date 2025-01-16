@@ -50,4 +50,20 @@ export class UsersController {
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.usersService.remove(id);
   }
+
+  @Post(':id/projects/:projectId')
+  addProject(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('projectId', ParseIntPipe) projectId: number,
+  ) {
+    return this.usersService.addProjectToUser(id, projectId);
+  }
+
+  @Delete(':id/projects/:projectId')
+  removeProject(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('projectId', ParseIntPipe) projectId: number,
+  ) {
+    return this.usersService.removeProjectFromUser(id, projectId);
+  }
 }

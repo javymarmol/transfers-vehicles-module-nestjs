@@ -13,6 +13,7 @@ export class UsersFactory {
       email: faker.internet.email(),
       password_hash: faker.internet.password(),
       created_at: faker.date.recent(),
+      projects: [],
       ...overrides,
     };
   }

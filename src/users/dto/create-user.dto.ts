@@ -1,4 +1,5 @@
 import {
+  IsArray,
   IsNotEmpty,
   IsString,
   Matches,
@@ -27,4 +28,8 @@ export class CreateUserDto {
     message: 'password too weak',
   })
   password: string;
+
+  @IsArray()
+  @ApiProperty()
+  projectsIds: number[];
 }
