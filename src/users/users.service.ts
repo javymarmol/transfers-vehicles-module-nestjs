@@ -51,8 +51,14 @@ export class UsersService {
   async findOne(id: number) {
     const user = await this.usersRepository.findOne({
       where: { id },
-      relations: ['projects', 'organizational_units'],
+      relations: [
+        'projects',
+        'organizational_units',
+        'role',
+        'role.permissions',
+      ],
     });
+
     if (!user) {
       throw new NotFoundException('User not found');
     }
@@ -121,7 +127,10 @@ export class UsersService {
   }
 
   async findByUsername(username: string) {
-    return this.usersRepository.findOne({ where: { username } });
+    return this.usersRepository.findOne({
+      where: { username },
+      relations: ['role'],
+    });
   }
 
   async findByEmail(email: string) {

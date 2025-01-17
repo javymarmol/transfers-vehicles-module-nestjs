@@ -39,7 +39,7 @@ export class AuthService {
       expires.getMilliseconds() +
         ms(String(this.configService.jwtAccessTokenExpirationTime)),
     );
-    const payload: PayloadToken = { username: user.username, sub: user.id };
+    const payload: PayloadToken = { role: user.role.id, sub: user.id };
     const token = this.jwtService.sign(payload);
 
     response.cookie('Authentication', token, {
@@ -50,5 +50,10 @@ export class AuthService {
     return {
       access_token: token,
     };
+  }
+
+  async getUserRolePermissions(id: number) {
+    const user = await this.usersService.findOne(id);
+    return user.role;
   }
 }

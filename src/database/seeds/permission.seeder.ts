@@ -38,7 +38,6 @@ export default class PermissionSeeder implements Seeder {
 
     const roles = await roleRepository.find();
 
-    console.log('roles count', roles.length);
     if (roles.length == 3) return;
 
     console.log('pass length validation', roles.length == 3);

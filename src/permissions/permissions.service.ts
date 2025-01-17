@@ -19,4 +19,11 @@ export class PermissionsService {
     });
     return role.permissions;
   }
+
+  async getRolePermissionsByUser(userId: number) {
+    return await this.rolesRepository.findOne({
+      where: { users: { id: userId } },
+      relations: ['permissions'],
+    });
+  }
 }

@@ -9,7 +9,7 @@ import { PayloadToken } from '../interfaces/payload-token.interface';
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
     @Inject(authConfig.KEY)
-    private readonly configService: ConfigType<typeof authConfig>,
+    configService: ConfigType<typeof authConfig>,
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromExtractors([
@@ -21,7 +21,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     });
   }
 
-  async validate(payload: PayloadToken) {
+  async validate(payload: PayloadToken): Promise<PayloadToken> {
     return payload;
   }
 }

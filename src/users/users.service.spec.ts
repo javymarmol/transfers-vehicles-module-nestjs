@@ -175,7 +175,12 @@ describe('UsersService', () => {
 
       expect(userRepository.findOne).toHaveBeenCalledWith({
         where: { id: user.id },
-        relations: ['projects', 'organizational_units'],
+        relations: [
+          'projects',
+          'organizational_units',
+          'role',
+          'role.permissions',
+        ],
       });
       expect(result).toBe(user);
       expect(result.projects).toContain(project);
@@ -210,7 +215,12 @@ describe('UsersService', () => {
     expect(result.username).toBe(updateUserDto.username);
     expect(userRepository.findOne).toHaveBeenCalledWith({
       where: { id },
-      relations: ['projects', 'organizational_units'],
+      relations: [
+        'projects',
+        'organizational_units',
+        'role',
+        'role.permissions',
+      ],
     });
     expect(userRepository.save).toHaveBeenCalledWith({
       ...user,
