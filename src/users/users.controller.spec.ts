@@ -5,6 +5,7 @@ import { MockFunctionMetadata, ModuleMocker } from 'jest-mock';
 import { UsersFactory } from '../../test/factories/users.factory';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { ProjectsFactory } from '../../test/factories/projects.factory';
+import { CreateUserDto } from './dto/create-user.dto';
 
 const moduleMocker = new ModuleMocker(global);
 
@@ -87,11 +88,12 @@ describe('UsersController', () => {
   describe('create', () => {
     it('should create a user', async () => {
       const user = UsersFactory.create();
-      const createUserDto = {
+      const createUserDto: CreateUserDto = {
         username: user.username,
         email: user.email,
         password: 'StrongPass123!',
         projectsIds: [],
+        organizationalUnitsIds: [],
       };
       service.create = jest.fn().mockResolvedValue(user);
 
@@ -111,6 +113,7 @@ describe('UsersController', () => {
         email: user.email,
         password: 'StrongPass123!',
         projectsIds: projects.map((project) => project.id),
+        organizationalUnitsIds: [],
       };
       user.projects = projects;
 
@@ -134,6 +137,7 @@ describe('UsersController', () => {
         email: user.email,
         password: 'StrongPass123!',
         projectsIds: [],
+        organizationalUnitsIds: [],
       };
       service.create = jest
         .fn()

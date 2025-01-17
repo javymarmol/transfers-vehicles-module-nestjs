@@ -32,4 +32,8 @@ export class CreateUserDto {
   @IsArray()
   @ApiProperty()
   projectsIds: number[];
+
+  @IsArray()
+  @ApiProperty()
+  organizationalUnitsIds: number[];
 }

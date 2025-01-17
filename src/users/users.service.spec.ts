@@ -8,6 +8,8 @@ import { User } from './entities/user.entity';
 import { UsersFactory } from '../../test/factories/users.factory';
 import { ProjectsFactory } from '../../test/factories/projects.factory';
 import { Project } from '../projects/entities/project.entity';
+import { CreateUserDto } from './dto/create-user.dto';
+import { OrganizationalUnit } from '../organizational_units/entities/organizational_unit.entity';
 
 describe('UsersService', () => {
   let service: UsersService;
@@ -38,6 +40,10 @@ describe('UsersService', () => {
           provide: getRepositoryToken(Project),
           useValue: mockRepository,
         },
+        {
+          provide: getRepositoryToken(OrganizationalUnit),
+          useValue: mockRepository,
+        },
       ],
     }).compile();
 
@@ -55,11 +61,12 @@ describe('UsersService', () => {
   describe('create', () => {
     it('should create a user', async () => {
       const user = UsersFactory.create();
-      const createUserDto = {
+      const createUserDto: CreateUserDto = {
         username: user.username,
         email: user.email,
         password: 'StrongPass123!',
         projectsIds: [],
+        organizationalUnitsIds: [],
       };
       mockRepository.create.mockReturnValue(user);
       mockRepository.save.mockResolvedValue(user);
@@ -92,6 +99,7 @@ describe('UsersService', () => {
         email: user.email,
         password: 'StrongPass123!',
         projectsIds: projects.map((project) => project.id),
+        organizationalUnitsIds: [],
       };
       mockRepository.create.mockReturnValue(user);
       mockRepository.save.mockResolvedValue(user);
@@ -125,6 +133,7 @@ describe('UsersService', () => {
         email: user.email,
         password: 'StrongPass123!',
         projectsIds: [1, 2],
+        organizationalUnitsIds: [],
       };
       mockRepository.findOne.mockResolvedValue(user);
       try {
@@ -166,7 +175,7 @@ describe('UsersService', () => {
 
       expect(userRepository.findOne).toHaveBeenCalledWith({
         where: { id: user.id },
-        relations: ['projects'],
+        relations: ['projects', 'organizational_units'],
       });
       expect(result).toBe(user);
       expect(result.projects).toContain(project);
@@ -201,7 +210,7 @@ describe('UsersService', () => {
     expect(result.username).toBe(updateUserDto.username);
     expect(userRepository.findOne).toHaveBeenCalledWith({
       where: { id },
-      relations: ['projects'],
+      relations: ['projects', 'organizational_units'],
     });
     expect(userRepository.save).toHaveBeenCalledWith({
       ...user,

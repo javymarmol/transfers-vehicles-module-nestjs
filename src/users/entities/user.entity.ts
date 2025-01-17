@@ -4,7 +4,6 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
-  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
@@ -33,6 +32,7 @@ export class User {
   @JoinTable()
   projects: Project[];
 
-  @OneToMany(() => OrganizationalUnit, (unit) => unit.project)
+  @ManyToMany(() => OrganizationalUnit, (unit) => unit.users)
+  @JoinTable()
   organizational_units: OrganizationalUnit[];
 }

@@ -15,6 +15,7 @@ export class OrganizationalUnitsFactory {
       name: faker.word.sample(),
       project: null,
       users: [],
+      created_at: faker.date.recent(),
       ...overrides,
     };
   }
