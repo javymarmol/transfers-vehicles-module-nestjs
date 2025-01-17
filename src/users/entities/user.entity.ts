@@ -4,11 +4,13 @@ import {
   Entity,
   JoinTable,
   ManyToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
 import { Project } from '../../projects/entities/project.entity';
 import { OrganizationalUnit } from '../../organizational_units/entities/organizational_unit.entity';
+import { Role } from '../../permissions/entities/role.entity';
 
 @Entity({ name: 'users' })
 export class User {
@@ -35,4 +37,7 @@ export class User {
   @ManyToMany(() => OrganizationalUnit, (unit) => unit.users)
   @JoinTable()
   organizational_units: OrganizationalUnit[];
+
+  @ManyToOne(() => Role, (role) => role.users)
+  role: Role;
 }

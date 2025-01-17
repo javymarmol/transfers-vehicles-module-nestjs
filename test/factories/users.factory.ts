@@ -15,6 +15,7 @@ export class UsersFactory {
       created_at: faker.date.recent(),
       projects: [],
       organizational_units: [],
+      role: null,
       ...overrides,
     };
   }

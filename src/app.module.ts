@@ -16,6 +16,7 @@ import dbConfig from '../config/database.config';
 import authConfig from '../config/auth.config';
 import { JwtGuard } from './auth/guards/jwt.guard';
 import { APP_GUARD } from '@nestjs/core';
+import { PermissionsModule } from './permissions/permissions.module';
 
 @Module({
   imports: [
@@ -41,6 +42,7 @@ import { APP_GUARD } from '@nestjs/core';
     VehiclesModule,
     TransfersModule,
     AuthModule,
+    PermissionsModule,
   ],
   controllers: [AppController],
   providers: [

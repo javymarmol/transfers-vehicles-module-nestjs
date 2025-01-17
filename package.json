@@ -24,7 +24,8 @@
     "migrate": "npm run typeorm -- migration:run",
     "migrations:show": "npm run typeorm -- migration:show",
     "migrations:drop": "npm run typeorm -- schema:drop",
-    "migrations:revert": "npm run typeorm -- migration:revert"
+    "migrations:revert": "npm run typeorm -- migration:revert",
+    "seed:run": "ts-node ./node_modules/typeorm-extension/bin/cli.cjs seed:run -d src/database/data-source.migrations.ts"
   },
   "dependencies": {
     "@faker-js/faker": "^9.3.0",
@@ -50,7 +51,8 @@
     "pg-mem": "^3.0.4",
     "reflect-metadata": "^0.1.13",
     "rxjs": "^7.8.1",
-    "typeorm": "^0.3.20"
+    "typeorm": "^0.3.20",
+    "typeorm-extension": "^3.6.3"
   },
   "devDependencies": {
     "@nestjs/cli": "^10.0.0",
