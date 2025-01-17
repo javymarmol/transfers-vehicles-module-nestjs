@@ -119,4 +119,12 @@ export class UsersService {
     user.projects = user.projects.filter((project) => project.id !== projectId);
     return this.usersRepository.save(user);
   }
+
+  async findByUsername(username: string) {
+    return this.usersRepository.findOne({ where: { username } });
+  }
+
+  async findByEmail(email: string) {
+    return this.usersRepository.findOne({ where: { email } });
+  }
 }

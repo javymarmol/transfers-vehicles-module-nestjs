@@ -10,14 +10,18 @@ import { ProjectsModule } from './projects/projects.module';
 import { OrganizationalUnitsModule } from './organizational_units/organizational_units.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
 import { TransfersModule } from './transfers/transfers.module';
+import { AuthModule } from './auth/auth.module';
 
 import dbConfig from '../config/database.config';
+import authConfig from '../config/auth.config';
+import { JwtGuard } from './auth/guards/jwt.guard';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       envFilePath: '.env',
-      load: [dbConfig],
+      load: [dbConfig, authConfig],
       isGlobal: true,
       validationSchema: Joi.object({
         PORT: Joi.number().default(3000),
@@ -26,6 +30,8 @@ import dbConfig from '../config/database.config';
         DATABASE_USER: Joi.string().required(),
         DATABASE_PASSWORD: Joi.string().required(),
         DATABASE_NAME: Joi.string().required(),
+        JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
+        JWT_ACCESS_TOKEN_EXPIRATION_TIME: Joi.string().required(),
       }),
     }),
     UsersModule,
@@ -34,8 +40,15 @@ import dbConfig from '../config/database.config';
     OrganizationalUnitsModule,
     VehiclesModule,
     TransfersModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: JwtGuard,
+    },
+  ],
 })
 export class AppModule {}
